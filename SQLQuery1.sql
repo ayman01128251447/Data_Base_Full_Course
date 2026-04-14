@@ -78,3 +78,5 @@ from customers
 where score <> 0
 group by country
 having sum(score)> 430
+
+--
