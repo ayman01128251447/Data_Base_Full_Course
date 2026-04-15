@@ -222,3 +222,4 @@ truncate table customers
 truncate more faster but don't work with foreign key
 delete slow but work with fk
 */
+
