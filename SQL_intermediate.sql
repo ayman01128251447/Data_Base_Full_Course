@@ -162,8 +162,3 @@ select CustomerID,FirstName,LastName from sales.Customers
 intersect
 select EmployeeID,FirstName,LastName from sales.employees
 
--- union all faster than union
-/* find employees who are not customers at the same time */
-select CustomerID,FirstName,LastName from sales.Customers
-union
-select EmployeeID,FirstName,LastName from sales.employees
