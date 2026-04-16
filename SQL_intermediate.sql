@@ -162,3 +162,96 @@ select CustomerID,FirstName,LastName from sales.Customers
 intersect
 select EmployeeID,FirstName,LastName from sales.employees
 
+/*order data are stored in seprte tables orders and orderArchive
+combine all orders data into one report without duplicates*/
+select 
+'Orders' as SourseTable
+,[OrderID]
+,[ProductID]
+,[CustomerID]
+,[SalesPersonID]
+,[OrderDate]
+,[ShipDate]
+,[OrderStatus]
+,[ShipAddress]
+,[BillAddress]
+,[Quantity]
+,[Sales]
+,[CreationTime]
+from sales.orders
+union
+select 
+'OrderArchive' as SourseTable
+,[OrderID]
+,[ProductID]
+,[CustomerID]
+,[SalesPersonID]
+,[OrderDate]
+,[ShipDate]
+,[OrderStatus]
+,[ShipAddress]
+,[BillAddress]
+,[Quantity]
+,[Sales]
+,[CreationTime]
+from sales.OrdersArchive
+
+-- funcitons 
+/*
+single-row funcitons --> string ,numeric, data &time , null
+multi-row functions --> aggregate , window
+*/
+/*
+string 
+manipulation --> concat, upper , lower, trim , replace
+calculation --> len
+extracion --> left , right , substring
+*/
+/* first name and country in one column
+firstname is upper and country small */
+select 
+FirstName,
+country,
+concat(FirstName,' ',country) as name_counry,
+upper(firstname) as capitalize,
+lower(country) as small,
+trim(FirstName) as NospaceInLeftOrRight,
+len(FirstName) - len(trim(FirstName)) flag -- to show there are spaces in right and left or no
+from sales.Customers
+-- Replace(vlue,'-',' ')
+/* replace file extence from txt to csv */
+select
+'file.txt' [fileName],
+replace('file.txt','txt','csv') changeExtence
+/* retriev the first and last two char of each first name
+and substring */
+select 
+FirstName,
+left(FirstName,2) leftTwoChar,
+right(FirstName, 2) rightTwoChar,
+substring(firstname,2 , 2) [substring]
+from sales.Customers
+/* retrieve customer name fom index 2 to the end*/
+select 
+FirstName,
+substring(FirstName,2,len(FirstName)) as name
+from sales.customers
+
+-- Numeric Functions
+
+-- Round 
+select
+3.516 num,
+round(3.516,2) as round_2,
+round(3.516,1) as round_1,
+round(3.516,0) as round_0
+-- ABS absolute
+select
+-10 num,
+ABS(-10) absNum
+
+-- Data Time functions
+-- timestamp or datetime 2026-04-16 03:15:50:0000000
+-- Getdate() give the current datetime
+select
+getdate() currentDate
