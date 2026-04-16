@@ -255,3 +255,82 @@ ABS(-10) absNum
 -- Getdate() give the current datetime
 select
 getdate() currentDate
+
+/* Date & Time Functions */
+/*
+EXtraction: Day , Month , Year , DatePart , SateName , DateTrunc , Eomonth
+Format & Casting: Format , Convert , Cast
+Calculations: DateAdd , Dateiff
+Validation: Isdate
+*/
+select 
+getdate() currentDate, -- return date
+day(getdate()) dayofday, -- return int
+month(getdate()) monthday, -- return int
+year(getdate()) yearday -- return int
+-- datebart is the best 
+select
+datepart(week,getdate()) [week], -- return the weeks'year
+datepart(quarter,getdate()) [quarter], -- return the quarter'year
+datepart(month,getdate()) [month], -- return the month'year
+datepart(day,getdate()) [day], -- return the day'year
+datepart(year,getdate()) [year], -- return the year'year
+datepart(HOUR,getdate()) [hour], -- return the hour'year
+datepart(MINUTE,getdate()) [minute], -- return the minute'year
+datepart(SECOND,getdate()) [second] -- return the second'year
+-- datename  return string
+select
+datename(weekday,getdate()) [weekday],
+datename(month,getdate()) [month_name]
+-- datetrunc  return date
+select
+datetrunc(minute,getdate()) Till_Minute,
+datetrunc(hour,getdate()) Till_Hour
+/* example for useing datetrunc for aggregation */
+select
+datename(month,CreationTime) month,
+datetrunc(month,cast(creationtime as date)),
+EOMONTH(CreationTime) endofmonth
+from sales.orders
+
+/* how many orders were placed each year month ? */
+-- filtering data usin int faster than string
+select *
+from sales.orders
+where month(OrderDate) =2
+
+
+-- Date Formating
+-- yyyy-mm-dd   --> international standard(ISO)
+-- mm-dd-yyyy   --> USA standard
+-- dd-mm-yyyy   --> European Standard
+
+-- format return string only
+select
+cast(creationtime as date) standard_date,
+format(creationtime, 'MM-dd-yyyy') us_date,
+format(creationtime, 'dd-MM-yyyy') urop_date,
+format(creationtime,'dd') dd,  -- 01
+format(creationtime,'ddd') ddd, -- Wed
+format(creationtime,'dddd') dddd, -- Wednesday
+format(creationtime,'MM') MM,  -- 01 -- should be capital 'M'
+format(creationtime,'MMM') MMM, -- Wed
+format(creationtime,'MMMM') MMMM -- Wednesday
+from sales.orders
+/* Day Wed Jan Q1 2025 12:34:56 PM */
+select 
+creationtime ,
+'Day ' +
+format(creationtime,'ddd MMM') +  ' '
++ ' Q' +datename(quarter,creationtime ) +' '+
+format(CreationTime, 'yyyy hh:mm:ss tt') as CustomerFormat
+from sales.orders
+-- conver like cast
+select
+convert(int , '123') as string, -- 0 is default 
+convert(varchar, creationtime , 32)  AS DATE ,  -- american standard format
+convert(varchar, creationtime , 34)  AS DATE   -- urop ////
+FROM sales.orders
+-- cast(value as data_type)
+
+
