@@ -332,5 +332,67 @@ convert(varchar, creationtime , 32)  AS DATE ,  -- american standard format
 convert(varchar, creationtime , 34)  AS DATE   -- urop ////
 FROM sales.orders
 -- cast(value as data_type)
+-- dateadd 
+select 
+OrderDate,
+dateadd(year,2,OrderDate),
+dateadd(month,-4,orderdate)
+from sales.orders
+--datediff
+select 
+orderdate,
+shipdate,
+datediff(day,orderdate,ShipDate) diffDAY
+from sales.orders
+/* calculate the age of employees */
+select 
+FirstName,
+datediff(year,birthdate,getdate()) age_of_employee
+from sales.employees
+/* find average dhipping duration in days for each month */
+select 
+datename(month,orderdate) month,
+avg(datediff(day,orderdate,shipdate)) avg_days
+from sales.orders
+group by DATENAME(month,orderdate)
+/* find the number of days between each order and previous order */
+select 
+orderid,
+orderdate,
+lag(orderdate) over (order by orderdate) previousorder,
+datediff(day,lag(orderdate) over (order by orderdate),orderdate)
+from sales.orders
+-- isdate
+select
+isdate('123') [check],
+isdate('2025-08-20') [check],
+isdate('20-08-2025') [check],
+isdate('2025') [check]
+
+-- Isnull VS Coalesce
+-- fast        slow
+-- is(orderdate,'unknown')
+-- coalesce(orderdate,chipaddress,billaddress,'unknown')
+select 
+isnull(shipaddress,'unknown') isnull_fun,
+coalesce(shipaddress,billaddress,'unknown') coalesce_fun -- التاام
+from sales.orders
+/* find the average scores of the customers */
+select 
+customerid,
+score,
+avg(isnull(score,0)) over() avg_after_filter_nulls
+from sales.customers
+/* full name in single field and add 10 bonus points
+to each customer's score */
+
+select 
+firstname +' ' + isnull(lastname,'') name_customer,
+isnull(score,0)+10
+from sales.customers
+
+
+
+
 
 
